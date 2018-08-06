@@ -21,6 +21,7 @@ $sql = "SELECT * FROM member";
 $data = $db->dbQuery($sql);
 ```
 result will be
+```
 Array
 (
     [0] => Array
@@ -50,3 +51,4 @@ Array
             [Email] => dave_moore@mail.com
         )
 )
+```
