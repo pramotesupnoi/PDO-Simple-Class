@@ -43,14 +43,7 @@ class Database {
 	* Set default value and connect to database
 	*
 	*/ 
-	public function __construct($hostname = "localhost", $username = "root", $password = "password", $database = "databasename", $dbType = "mysql", $charset = "utf8", $useEmulate = true) {
-	 	$this->dbType = $dbType;
-		$this->charset = $charset;
-		$this->hostname = $hostname;
-		$this->username = $username;
-		$this->password = $password;
-		$this->database = $database;
-		$this->useEmulate = $useEmulate;
+	public function __construct() {
 		$this->Connect();
 	}
 
@@ -65,15 +58,28 @@ class Database {
 	}
 
 	/**
+	*
+	* Read configuration file
 	* Connect to database
 	* Create pdo object
 	* Set PDO Error mode
 	* Set PDO emulation of prepared statements
+	*
 	*/
 	private function Connect() {
+		$conf = parse_ini_file("db.config.ini", true);
+	 	$this->dbType = $conf["database"]["dbtype"];
+		$this->charset = $conf["database"]["charset"];
+		$this->hostname = $conf["database"]["host"];
+		$this->username = $conf["database"]["uname"];
+		$this->password = $conf["database"]["pwd"];
+		$this->database = $conf["database"]["dbname"];
+		$this->useEmulate = $conf["database"]["emulate"];
+
 		$strConn = $this->dbType.':host='.$this->hostname.';dbname='.$this->database.';charset='.$this->charset;
 
 		try {
+
 			$this->pdo = new PDO($strConn, $this->username, $this->password);
 			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);	
 			$this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, $this->useEmulate);
@@ -86,23 +92,27 @@ class Database {
 	}
 
 	/**
+	*
 	* Close connection by set pdo object to null
+	*
 	*/
 	private function CloseConnection() {
  		$this->pdo = null;
  	}
 
  	/**
+ 	*
 	* Sql command will execute here
 	*
 	* @param string $sql
 	* @param array $param
 	* @return boolean
 	*
-	* 1. Check if pdo object is null, connect to database.
-	* 2. trim sql command.
-	* 3. prepare sql statement.
-	* 4. execute sql with parameter(s) .
+	* 1. Check if pdo object is null, connect to database
+	* 2. trim sql command
+	* 3. prepare sql statement
+	* 4. execute sql with parameter(s)
+	*
  	*/
  	private function executeSql($sql, $param) {
  		try {
