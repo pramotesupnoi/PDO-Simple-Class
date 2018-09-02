@@ -26,8 +26,8 @@ elumate = true
 ```
 
 ## How to use
-### Query
 The examples will use member table
+
 #### member table 
 | MemberID | Name | BirthDate | Phone | Email
 |:-----------:|:------------:|:------------:|:------------:|:------------:|
@@ -35,6 +35,7 @@ The examples will use member table
 | 2       |        Jane Doe  |     1992-02-01    | 202-555-0131 | jane@mail.com
 | 3       |        David Moor  |     1993-03-06    | 202-555-0101 | dave_moore@mail.com
 
+### Query
 You can query data and fetching it by use dbQuery function
 The function will return array of query result
 ```
@@ -87,7 +88,7 @@ Array (
 )
 ```
 
-You can set fetch style by passing it as a third parameter (Default is PDO::FETCH_ASSOC)
+You can set pdo fetch style by passing it as a third parameter (Default is PDO::FETCH_ASSOC)
 ```
 $sql = "SELECT Name, BirthDate, Phone, Email FROM member WHERE MemberID = :id";
 $param = array(':id' => 1);
@@ -100,7 +101,7 @@ Array (
 )
 ```
 
-If you want to set fetch style more than one value then you can use array to help you
+If you want to set pdo fetch style more than one value then you can simply use array
 ```
 $sql = "SELECT Name, BirthDate, Phone, Email FROM member WHERE MemberID = :id";
 $param = array(':id' => 1);
