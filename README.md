@@ -11,7 +11,7 @@ host = "localhost"
 uname = "root"
 pwd = "password"
 dbname = "mydatabase"
-elumate = true
+emulate = true
 ```
 
 ### 2. Include database.php in your project
