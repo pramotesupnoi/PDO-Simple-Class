@@ -71,7 +71,7 @@ class DatabaseConnection {
   *
   */
   private function Connect() {
-    $conf = parse_ini_file(__DIR__."/../../data/config/database.config.ini", true);
+    $conf = parse_ini_file(__DIR__."/database.config.ini", true);
     $this->dbType = $conf["database"]["dbtype"];
     $this->charset = $conf["database"]["charset"];
     $this->hostname = $conf["database"]["host"];
@@ -254,7 +254,7 @@ class DatabaseLog {
   *
   */ 
   public function __construct() {
-    $conf = parse_ini_file(__DIR__."/../../data/config/database.config.ini", true);
+    $conf = parse_ini_file(__DIR__."/database.config.ini", true);
     $this->log_dir = __DIR__ . "/" . $conf["database_log"]["log_dir"];
     $this->log_pref = $conf["database_log"]["log_name_prefix"];
     $this->log_suff = $conf["database_log"]["log_name_suffix"];
