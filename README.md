@@ -2,27 +2,35 @@
 A Simple PHP database object (PDO) class
 
 ## Getting Started
-### 1. Set database configuration in db.config.ini
+### 1. Set database configuration in database.config.ini
 ```
+; example configuration file
 [database]
 dbtype = "mysql"
 charset = "utf8"
 host = "localhost"
 uname = "root"
-pwd = "password"
-dbname = "mydatabase"
-emulate = true
+pwd = "999999999"
+dbname = "db_name"
+emulate = "true"
+
+[database_log]
+log_dir = "db-log/"
+log_name_prefix = "db_log_"
+log_name_suffix = ""
+log_ext = "json"
+log_enable = "false"
 ```
 
 ### 2. Include database.php in your project
 ```
 <?php
-  include 'database.php';
+  include 'pdo-database.php';
 ```
 
 ### 3. Create object
 ```
-  $db = new Database();
+  $db = new DatabaseConnection();
 ```
 
 ## How to use
