@@ -25,12 +25,12 @@ log_enable = "false"
 ### 2. Include database.php in your project
 ```
 <?php
-  include 'pdo-database.php';
+  include 'database.php';
 ```
 
 ### 3. Create object
 ```
-  $db = new DatabaseConnection();
+  $db = new Database();
 ```
 
 ## How to use
