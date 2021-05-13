@@ -10,27 +10,27 @@ dbtype = "mysql"
 charset = "utf8"
 host = "localhost"
 uname = "root"
-pwd = "999999999"
-dbname = "db_name"
+pwd = ""
+dbname = "test_pdo"
 emulate = "true"
 
 [database_log]
-log_dir = "db-log/"
-log_name_prefix = "db_log_"
-log_name_suffix = ""
-log_ext = "json"
-log_enable = "false"
+dir = "db-log/"
+name_prefix = "log_"
+name_suffix = ""
+ext = "json"
+enable = "true"
 ```
 
 ### 2. Include database.php in your project
 ```
 <?php
-  include 'database.php';
+  include 'pdo-database.php';
 ```
 
 ### 3. Create object
 ```
-  $db = new Database();
+  $db = new DatabaseConnection();
 ```
 
 ## How to use
