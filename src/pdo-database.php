@@ -72,14 +72,16 @@ class DatabaseConnection {
   */
   private function Connect() {
     $conf = parse_ini_file(__DIR__."/database.config.ini", true);
-    $this->dbType = $conf["database"]["dbtype"];
-    $this->charset = $conf["database"]["charset"];
-    $this->hostname = $conf["database"]["host"];
-    $this->username = $conf["database"]["uname"];
-    $this->password = $conf["database"]["pwd"];
-    $this->database = $conf["database"]["dbname"];
+    $this->dbType     = $conf["database"]["dbtype"];
+    $this->charset    = $conf["database"]["charset"];
+    $this->hostname   = $conf["database"]["host"];
+    $this->username   = $conf["database"]["uname"];
+    $this->password   = $conf["database"]["pwd"];
+    $this->database   = $conf["database"]["dbname"];
     $this->useEmulate = $conf["database"]["emulate"] == "true" ? true : false;
+
     $strConn = $this->dbType.':host='.$this->hostname.';dbname='.$this->database.';charset='.$this->charset;
+
     try {
       $this->log = new DatabaseLog();
       $this->pdo = new PDO($strConn, $this->username, $this->password);
@@ -232,19 +234,19 @@ class DatabaseConnection {
 class DatabaseLog {
 
   # @string log file directory
-  private $log_dir;
+  private $dir;
 
   # @string log file name prefix
-  private $log_pref;
+  private $name_prefix;
 
   # @string log file name suffix
-  private $log_suff;
+  private $name_suffix;
 
   # @string log file type
-  private $log_ext;
+  private $ext;
 
   # @boolean log enable status
-  private $log_status;
+  private $enable;
 
   /**
   *
@@ -255,11 +257,11 @@ class DatabaseLog {
   */ 
   public function __construct() {
     $conf = parse_ini_file(__DIR__."/database.config.ini", true);
-    $this->log_dir = __DIR__ . "/" . $conf["database_log"]["log_dir"];
-    $this->log_pref = $conf["database_log"]["log_name_prefix"];
-    $this->log_suff = $conf["database_log"]["log_name_suffix"];
-    $this->log_ext = $conf["database_log"]["log_ext"];
-    $this->log_status = $conf["database_log"]["log_enable"] == "true" ? true : false;
+    $this->dir            = __DIR__ . "/" . $conf["database_log"]["dir"];
+    $this->name_prefix    = $conf["database_log"]["name_prefix"];
+    $this->name_suffix    = $conf["database_log"]["name_suffix"];
+    $this->ext            = $conf["database_log"]["ext"];
+    $this->enable         = $conf["database_log"]["enable"] == "true" ? true : false;
     $this->checkLogDirectoty();
   }
 
@@ -285,12 +287,12 @@ class DatabaseLog {
   *
   */
   public function writeLog($res, $stmt, $msg = ""){
-    if($this->log_status!==true){
+    if($this->enable!==true){
       return true;
     }
     $this->checkLogDirectoty();
     $logname = $this->getLogName();
-    $logtarget = $this->log_dir . $logname;
+    $logtarget = $this->dir . $logname;
     $now_stamp = strtotime("now");
     $now = date("Y-m-d H:i:s", $now_stamp);
     $logObj = array(
@@ -309,7 +311,13 @@ class DatabaseLog {
     }
     array_push($tmpArr, $logObj);
     $newJson = json_encode($tmpArr);
-    file_put_contents($logtarget, $newJson);
+    try {
+      file_put_contents($logtarget, $newJson);
+    }
+    catch (PDOException $e) {
+      //echo "Unable to write log: " . $e->getMessage();
+      return false;
+    }
     return true;
   }
 
@@ -320,8 +328,8 @@ class DatabaseLog {
   *
   */
   private function checkLogDirectoty() {
-    if(!is_dir($this->log_dir)){
-      mkdir($this->log_dir, 0777, true);
+    if(!is_dir($this->dir)){
+      mkdir($this->dir, 0777, true);
     }
   }
 
@@ -331,7 +339,7 @@ class DatabaseLog {
   *
   */
   private function getLogName() {
-    return $filename = $this->log_pref . date("Y-m-d") . $this->log_suff . "." . $this->log_ext;
+    return $filename = $this->name_prefix . date("Y-m-d") . $this->name_suffix . "." . $this->ext;
   }
 }
 ?>
